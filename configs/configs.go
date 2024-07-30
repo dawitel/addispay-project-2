@@ -22,8 +22,9 @@ type Config struct {
     PaymentsLogTopic        string `yaml:"payments_log_topic"`
     PaymentsLogSubscription string `yaml:"payments-log-subscription"`
     OrdersLogSubscription   string `yaml:"orders-log-subscription"`
-    GrpcServerAddr        string `yaml:"grpc_server_addr"`
+    GrpcServerAddr          string `yaml:"grpc_server_addr"`
     GRPCPort                string `yaml:"grpc_port"`
+    APIGatewayAddr          string `yaml:"api_gateway_addr"`
     OrderServiceLogFile     string `yaml:"order_service_log_file"`
     PaymentServiceLogFile   string `yaml:"payment_service_log_file"`
     RetryCount              int    `yaml:"retry_count"`
@@ -32,7 +33,9 @@ type Config struct {
 }
 
 // LoadConfig reads the configuration file and unmarshals it into the Config struct.
-func LoadConfig(configPath string) (*Config, error) {
+
+func LoadConfig() (*Config, error) {
+    configPath := "configs/configs.yml";
     // Check if the config file exists
     if _, err := os.Stat(configPath); os.IsNotExist(err) {
         return nil, err
@@ -64,6 +67,6 @@ func LoadConfig(configPath string) (*Config, error) {
         config.ExpiryTime = 120 // Default expiry time in seconds (2 minutes)
     }
 
-    logger.Success("Config loaded successfully from %s", configPath)
+    logger.Success("Config loaded successfully from ", configPath)
     return &config, nil
 }

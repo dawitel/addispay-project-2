@@ -2,7 +2,7 @@
 
 # Remove compiled binaries
 echo "Cleaning up binaries..."
-rm -f bin/order_service bin/payment_service bin/logger_service
+rm -f bin/order_service bin/payment_service bin/logger_service bin/APIclient
 
 # Remove logs
 echo "Cleaning up logs..."

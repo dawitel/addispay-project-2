@@ -17,14 +17,14 @@ import (
 var logger = utils.GetLogger()
 
 func main() {
-	config, err := configs.LoadConfig("configs/configs.yaml")
+	config, err := configs.LoadConfig()
     if err != nil {
         logger.Error("Failed to load config: ", err)
     }
 	mux := http.NewServeMux()
 	mux.HandleFunc("/v1/checkout", APIgatewayHandler)
 	srv := &http.Server{
-		Addr: config.GRPCPort,
+		Addr: config.APIGatewayAddr,
 		Handler: mux,
 		IdleTimeout: time.Minute,
 		ReadTimeout: 10 * time.Second,
@@ -39,7 +39,7 @@ func main() {
 }
 
 func APIgatewayHandler(w http.ResponseWriter, r *http.Request) {
-	config, err := configs.LoadConfig("configs/configs.yaml")
+	config, err := configs.LoadConfig()
     if err != nil {
 		logger.Error("Failed to load configuration files: ", err)
     }

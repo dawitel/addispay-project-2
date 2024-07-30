@@ -11,7 +11,7 @@ var logger = utils.GetLogger()
 
 func main() {
     // Load configuration
-    config, err := configs.LoadConfig("config/config.yaml")
+    config, err := configs.LoadConfig()
     if err != nil {
         logger.Error("Failed to load config: ", err)
     }

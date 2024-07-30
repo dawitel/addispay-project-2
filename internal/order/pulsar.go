@@ -13,7 +13,7 @@ var pulsarClient pulsar.Client
 
 // InitPulsar initializes the Pulsar client.
 func InitPulsar() error {
-    config, err := configs.LoadConfig("configs/configs.yml")
+    config, err := configs.LoadConfig()
     if err != nil {
         logger.Error("Could not load configuration files: ", err)
     }
@@ -29,7 +29,7 @@ func InitPulsar() error {
 
 // PublishOrder publishes an order message to a Pulsar topic.
 func PublishOrder(order *models.Order) error {
-     config, err := configs.LoadConfig("configs/configs.yml")
+     config, err := configs.LoadConfig()
     if err != nil {
         logger.Error("Could not load configuration files: ", err)
     }
@@ -64,7 +64,7 @@ func PublishOrder(order *models.Order) error {
 
 // PublishLogs publishes order logs to the logs-topic.
 func PublishLogs(logMessage *models.OrderLogMessage) error {
-     config, err := configs.LoadConfig("configs/configs.yml")
+     config, err := configs.LoadConfig()
     if err != nil {
         logger.Error("Could not load configuration files: ", err)
     }

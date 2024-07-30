@@ -12,7 +12,7 @@ var logger = utils.GetLogger()
 
 func main() {
     // Load configuration files to the environment
-	_, err := configs.LoadConfig("configs/configs.yml")
+	_, err := configs.LoadConfig()
     if err != nil {
         logger.Error("Could not load configuration files: ", err)
     }

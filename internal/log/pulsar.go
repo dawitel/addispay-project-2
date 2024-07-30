@@ -10,7 +10,7 @@ var logger = utils.GetLogger()
 
 func InitPulsar() error {
 	// Load configuration files to the environment
-	config, err := configs.LoadConfig("configs/configs.yml")
+	config, err := configs.LoadConfig()
     if err != nil {
         logger.Error("Could not load configuration files")
     }
