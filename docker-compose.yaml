@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  order_service:
+    build: .
+    entrypoint: ["/app/order_service"]
+    environment:
+      - MYSQL_DSN=user:password@tcp(mysql:3306)/my_database
+      - PULSAR_URL=pulsar://pulsar:6650
+      - GRPC_PORT=:50051
+      - LOG_FILE=/logs/order_service.log
+    volumes:
+      - ./logs:/logs
+    depends_on:
+      - mysql
+      - pulsar
+
+  payment_service:
+    build: .
+    entrypoint: ["/app/payment_service"]
+    environment:
+      - MYSQL_DSN=user:password@tcp(mysql:3306)/my_database
+      - PULSAR_URL=pulsar://pulsar:6650
+    depends_on:
+      - mysql
+      - pulsar
+
+  logger_service:
+    build: .
+    entrypoint: ["/app/logger_service"]
+    environment:
+      - PULSAR_URL=pulsar://pulsar:6650
+    depends_on:
+      - pulsar
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: my_database
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  pulsar:
+    image: apachepulsar/pulsar:2.8.1
+    command: ["bin/pulsar", "standalone"]
+    ports:
+      - "6650:6650"
+      - "8080:8080"
+
+volumes:
+  mysql_data:

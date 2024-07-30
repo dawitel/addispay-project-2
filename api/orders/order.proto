@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package order;
+option go_package = "/pb";
+
+
+message OrderRequest {
+    string cust_id        = 2   [json_name="cust_id"];
+    string cust_bank_acc  = 3   [json_name="cust_bank_acc"];
+    double amount         = 4   [json_name="amount"];
+    string phone_number   = 5   [json_name="phone_number"];
+    string callback_url   = 6   [json_name="callback_url"];
+}
+
+message OrderResponse {
+    string order_id = 1;
+    string status = 2;
+    string message = 3;
+}
+
+service OrderService {
+  rpc CreateOrder (OrderRequest) returns (OrderResponse);
+}
