@@ -25,7 +25,7 @@ func main() {
         logger.Error("Failed to initialize database: ", err)
     }
 
-    if err := order.InitPulsar(config.ProductionPulsarURL); err != nil {
+    if err := order.InitPulsar(); err != nil {
         logger.Error("Failed to initialize Pulsar client: ", err)
     }
 
@@ -38,10 +38,10 @@ func main() {
     orderService := &order.Service{}
     pb.RegisterOrderServiceServer(s, orderService)
 
-    logger.Success("Order service is running on port ", config.GRPCPort)
+    logger.Success("Order service is running on port: ", config.GRPCPort)
     if err := s.Serve(lis); err != nil {
         logger.Error("Failed to serve: ", err)
     }
-
+    
     // TODO: activate the publish order func
 }

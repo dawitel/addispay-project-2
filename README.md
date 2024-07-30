@@ -7,28 +7,27 @@
   </a>
 </p>
 
-This project implements an order processing and payment system using Apache Pulsar functions, gRPC, and Docker. The system is designed to handle high-concurrency order requests, process payments, and finalize orders, all in an asynchronous and scalable manner.
+This project implements an order processing and payment system using Apache Pulsar, gRPC, and Docker. The system is designed to handle high-concurrency order requests, process payments, and finalize orders, all in an asynchronous and scalable manner.
 
 ## Table of Contents
 
 1. [Overview](#overview)
 2. [Architecture](#architecture)
 3. [Getting Started](#getting-started)
-4. [Directory Structure](#directory-structure)
-5. [Usage](#usage)
-6. [Testing](#testing)
-7. [Deployment](#deployment)
-8. [License](#license)
+4. [Usage](#usage)
+5. [Testing](#testing)
+6. [Deployment](#deployment)
+7. [License](#license)
 
 ## Overview
 
-This system is composed of multiple services:
-- **gRPC Server**: Receives order requests and forwards them to the order processing service.
-- **Order Processing Service**: A Pulsar function that processes incoming orders.
-- **Payment Processing Service**: A Pulsar function that processes payment for the orders.
-- **Order Finalization Service**: A Pulsar function that finalizes the order processing based on payment results.
+This project consists of three backend services implemented in Golang:
 
-The services communicate via Apache Pulsar topics, with data being transferred in JSON format between Pulsar functions.
+1. **Order Service**: Handles order processing requests and interacts with the Payment Service.
+2. **Payment Service**: Simulates payment processing and publishes transaction results.
+3. **Logger Service**: Consumes log messages from a Pulsar topic and stores them in a MySQL database.
+
+The services communicate through Apache Pulsar, a distributed messaging and streaming platform. Log messages are centralized and managed by the Logger Service, which persists them in a MySQL database.
 
 ## Architecture
 
@@ -52,7 +51,7 @@ For more detail on the undelying architecture, thought processes, things that i 
 - **Go** (1.19 or higher) for local development and testing.
 - **Pulsar CLI** for managing Pulsar functions.
 - **Pulsar Admin CLI** for managing Pulsar topics.
-- **gRPC** for communication between services.
+- **make and protoc** for building and facilitating CLI activities.
 
 
 ### Setup
@@ -78,94 +77,94 @@ For more detail on the undelying architecture, thought processes, things that i 
     cd scripts && ./deploy_pulsar_functions.sh
     ```
 
-## Directory Structure
+## Project Structure
 
-```plaintext
-order-payment-system/
-├── cmd/
-│   ├── grpc_server/
+```
+.
+├── cmd
+│   ├── order_service
+│   │   └── main.go
+│   ├── payment_service
+│   │   └── main.go
+│   └── logger_service
 │       └── main.go
-├── configs/
-│   ├── config.yml
-├── docs/
-│   ├── architecture.md
-|   ├── architecture.svg
-├── internal/
-│   ├── domain/
-│   │   ├── models.go
-│   ├── grpc/
-│   │   ├── order_services.go
-│   ├── pulsar/
-│   │   ├── order_processor.go
-│   │   ├── payment_processor.go
-│   │   ├── order_finalizer.go
-│   ├── proto/
-│   │   ├── order.proto
-│   ├── util
-│       ├── config.go
-│       ├── logger.go
-├── scripts/
-│   ├── deploy.sh
-|   ├── start.sh
-|   ├── stop.sh
-|   ├── test.sh
-|   ├── build.sh
-|   ├── deploy_pulsar_functions.sh
-├── test/
-│   ├── grpc/
-│   │   ├── order_service_test.go
-│   ├── pulsar/
-│       ├── order_processor_test.go
-│       ├── payment_processor_test.go
-│       ├── order_finalizer_test.go
-├── air.toml
-├──.gitignore
-├── .goreleaser.yml
-├── docker-compose.yml
+├── config
+│   ├── config.go
+│   └── config.yaml
+├── internal
+│   ├── order
+│   │   └── order_handler.go
+│   ├── payment
+│   │   └── payment_handler.go
+│   └── log
+│       └── consumer.go
+├── models
+│   ├── log_entry.go
+│   └── log_message.go
+├── scripts
+│   ├── start.sh
+│   └── stop.sh
 ├── Dockerfile
-├── go.mod
-├── go.sum
-├── LICENSE
-├── Makefile
+├── docker-compose.yml
 └── README.md
+```
+
+
+### 3. Environment Variables
+
+Ensure that the following environment variables are set in your Docker Compose file or your environment:
+
+- `MYSQL_DSN`: The Data Source Name for connecting to MySQL, e.g., `user:password@tcp(mysql:3306)/my_database`.
+- `PULSAR_URL`: The URL for the Apache Pulsar instance, e.g., `pulsar://localhost:6650`.
+- `GRPC_PORT`: The gRPC server port for the Order Service, e.g., `:50051`.
+- `LOG_FILE`: File path for logging.
+
+### 4. Running the Scripts
+
+Use the provided scripts for managing the services.
+
+#### Starting Services
+
+```bash
+./scripts/start.sh
+```
+
+#### Stopping Services
+
+```bash
+./scripts/stop.sh
 ```
 
 ## Usage
 
-1. **Submit Orders**: Use a gRPC client to submit order requests to the gRPC server. The server listens on port `50051`.
+### Order Service
 
-2. **Monitor Services**: Check the logs and status of services using `docker-compose logs` and `docker-compose ps`.
+- **Endpoint**: gRPC server listens on the port defined by `GRPC_PORT`.
+- **Functionality**: Accepts order requests, publishes them to Pulsar, and waits for transaction results.
 
-3. **Scaling**: Adjust the number of replicas or resources allocated to the services by modifying the `docker-compose.yml` file.
+### Payment Service
 
-## Testing
+- **Functionality**: Consumes order messages, processes mock payments, and publishes results back to Pulsar.
 
-To run tests, use the provided test script:
+### Logger Service
 
-```sh
-cd scripts && ./test.sh
-```
+- **Functionality**: Consumes log messages from the `logs-topic`, processes them, and stores them in MySQL.
 
-This script runs unit tests for the gRPC server and Pulsar functions. Ensure that the environment is properly set up before running the tests.
+## Database
 
-## Deployment
+### MySQL
 
-1. **Build Docker Images**:
-    ```sh
-    cd scripts && ./build.sh
-    ```
+- **Setup**: The MySQL instance is defined in `docker-compose.yml`.
+- **Data Storage**: Log entries are stored in the `log_entries` table.
 
-2. **Push to Docker Registry**: Use the `deploy.sh` script to push Docker images to your registry.
-    ```sh
-    cd scripts && ./deploy.sh
-    ```
+## Contributing
 
-3. **Deploy**: Deploy the images to your target environment (e.g., Kubernetes, AWS ECS).
-
-
+Contributions are welcome! Please open an issue or submit a pull request.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-```
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
+## Contact
+
+For questions or support, please contact [your-email@example.com](mailto:your-email@example.com).

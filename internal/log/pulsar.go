@@ -25,23 +25,23 @@ func InitPulsar() error {
 
     // payment log consumer
     paymentConsumer, err := client.Subscribe(pulsar.ConsumerOptions{
-        Topic:            "payment-logs-topic",
-        SubscriptionName: "payment-log-subscription",
+        Topic:            config.PaymentsLogTopic,
+        SubscriptionName: config.PaymentsLogSubscription,
         Type:             pulsar.Shared,
     })
     if err != nil {
-        logger.Error("Could not subscribe to logs topic: ", err)
+        logger.Error("Could not subscribe to payments log topic: ", err)
     }
     defer paymentConsumer.Close()
     
     // order log consumer
     orderConsumer, err := client.Subscribe(pulsar.ConsumerOptions{
-        Topic:            "order-logs-topic",
-        SubscriptionName: "order-log-subscription",
+        Topic:            config.OrdersLogTopic,
+        SubscriptionName: config.OrdersLogSubscription,
         Type:             pulsar.Shared,
     })
     if err != nil {
-        logger.Error("Could not subscribe to logs topic: ", err)
+        logger.Error("Could not subscribe to orders log topic: ", err)
     }
     defer orderConsumer.Close()
 

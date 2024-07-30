@@ -2,23 +2,13 @@ package order
 
 import (
     "database/sql"
+    
     "github.com/dawitel/addispay-project-2/internal/models"
-    "github.com/dawitel/addispay-project-2/internal/utils"
 
     _ "github.com/go-sql-driver/mysql"
 )
 
 var db *sql.DB
-// InitDB initializes the database connection.
-func InitDB() error {
-    dsn := utils.GoDotEnvVariable("mysql_dsn")
-    var err error
-    db, err = sql.Open("mysql", dsn)
-    if err != nil {
-        return err
-    }
-    return db.Ping()
-}
 
 // SaveOrder stores the order details in the database.
 func SaveOrder(order *models.Order) error {

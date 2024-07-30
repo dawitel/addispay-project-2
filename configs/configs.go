@@ -14,9 +14,15 @@ var logger = utils.GetLogger()
 
 // Config holds the configuration settings for the application.
 type Config struct {
-    MySQLDSN                string  
     DevelopmentPulsarURL    string `yaml:"dev_pulsar_url"`
     ProductionPulsarURL     string `yaml:"prod_pulsar_url"`
+    OrdersTopic             string `yaml:"orders_topic"`
+    TransactionsTopic       string `yaml:"transactions_topic"`
+    OrdersLogTopic          string `yaml:"orders_log_topic"`
+    PaymentsLogTopic        string `yaml:"payments_log_topic"`
+    PaymentsLogSubscription string `yaml:"payments-log-subscription"`
+    OrdersLogSubscription   string `yaml:"orders-log-subscription"`
+    GrpcServerAddr        string `yaml:"grpc_server_addr"`
     GRPCPort                string `yaml:"grpc_port"`
     OrderServiceLogFile     string `yaml:"order_service_log_file"`
     PaymentServiceLogFile   string `yaml:"payment_service_log_file"`

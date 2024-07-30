@@ -1,18 +1,24 @@
 package order
 
 import (
-    "context"
-    "github.com/dawitel/addispay-project-2/internal/models"
+	"context"
 
-    "github.com/apache/pulsar-client-go/pulsar"
+	"github.com/dawitel/addispay-project-2/configs"
+	"github.com/dawitel/addispay-project-2/internal/models"
+
+	"github.com/apache/pulsar-client-go/pulsar"
 )
 
 var pulsarClient pulsar.Client
 
 // InitPulsar initializes the Pulsar client.
-func InitPulsar(pulsarURL string) error {
+func InitPulsar() error {
+    config, err := configs.LoadConfig("configs/configs.yml")
+    if err != nil {
+        logger.Error("Could not load configuration files: ", err)
+    }
     client, err := pulsar.NewClient(pulsar.ClientOptions{
-        URL: pulsarURL,
+        URL: config.ProductionPulsarURL,
     })
     if err != nil {
         return err
@@ -23,8 +29,12 @@ func InitPulsar(pulsarURL string) error {
 
 // PublishOrder publishes an order message to a Pulsar topic.
 func PublishOrder(order *models.Order) error {
+     config, err := configs.LoadConfig("configs/configs.yml")
+    if err != nil {
+        logger.Error("Could not load configuration files: ", err)
+    }
     producer, err := pulsarClient.CreateProducer(pulsar.ProducerOptions{
-        Topic: "test/mock/order-topic",
+        Topic: config.OrdersTopic,
     })
     if err != nil {
         return err
@@ -54,8 +64,12 @@ func PublishOrder(order *models.Order) error {
 
 // PublishLogs publishes order logs to the logs-topic.
 func PublishLogs(logMessage *models.OrderLogMessage) error {
+     config, err := configs.LoadConfig("configs/configs.yml")
+    if err != nil {
+        logger.Error("Could not load configuration files: ", err)
+    }
     producer, err := pulsarClient.CreateProducer(pulsar.ProducerOptions{
-        Topic: "order-logs-topic",
+        Topic: config.OrdersLogTopic,
     })
     if err != nil {
         return err
