@@ -78,7 +78,7 @@ func OrderResponseHandler(w http.ResponseWriter, r *http.Request) {
 		logger.Error("Failed to load configuration files: ", err)
     }
     // Forward the data to the forntend client
-    clientURL := fmt.Sprintf("%s/v1/api/processed-transactions", config.FrontendAddr) // Assuming an endpoint in Next.js to receive data
+    clientURL := fmt.Sprintf("%s/api/processed-transactions", config.FrontendAddr) // Assuming an endpoint in Next.js to receive data
     req, err := http.NewRequest("POST", clientURL, r.Body)
     if err != nil {
         http.Error(w, "Failed to create request to the Frontend", http.StatusInternalServerError)
