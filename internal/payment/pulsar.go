@@ -1,12 +1,13 @@
 package payment
 
 import (
-    "context"
-    "encoding/json"
+	"context"
+	"encoding/json"
 
-    "github.com/dawitel/addispay-project-2/internal/models"
+	"github.com/dawitel/addispay-project-2/configs"
+	"github.com/dawitel/addispay-project-2/internal/models"
 
-    "github.com/apache/pulsar-client-go/pulsar"
+	"github.com/apache/pulsar-client-go/pulsar"
 )
 
 var pulsarClient pulsar.Client
@@ -28,7 +29,7 @@ func ConsumeOrders(topic string) {
     consumer, err := pulsarClient.Subscribe(pulsar.ConsumerOptions{
         Topic:            topic,
         SubscriptionName: "order-subscription",
-        Type:             pulsar.Exclusive,
+        Type:             pulsar.Shared,
     })
     if err != nil {
         logger.Error("Could not subscribe to Pulsar topic: ", err)
@@ -84,8 +85,13 @@ func ConsumeOrders(topic string) {
 
 // PublishTransaction publishes the transaction result to the specified Pulsar topic.
 func PublishTransaction(transaction *models.Transaction) error {
+    // Load configuration files to the environment
+	config, err := configs.LoadConfig()
+    if err != nil {
+        logger.Error("Could not load configuration files")
+    }
     producer, err := pulsarClient.CreateProducer(pulsar.ProducerOptions{
-        Topic: "test/mock/transactions-topic",
+        Topic: config.TransactionsTopic,
     })
     if err != nil {
         return err
@@ -102,8 +108,13 @@ func PublishTransaction(transaction *models.Transaction) error {
 
 // PublishLogs publishes the transaction logs to the payment-logs-topic.
 func PublishLogs(logMessage *models.PaymentLogMessage) error {
+    // Load configuration files to the environment
+	config, err := configs.LoadConfig()
+    if err != nil {
+        logger.Error("Could not load configuration files")
+    }
     producer, err := pulsarClient.CreateProducer(pulsar.ProducerOptions{
-        Topic: "payment-logs-topic",
+        Topic: config.PaymentsLogTopic,
     })
     if err != nil {
         return err

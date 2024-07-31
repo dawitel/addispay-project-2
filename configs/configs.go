@@ -25,6 +25,7 @@ type Config struct {
     GrpcServerAddr          string `yaml:"grpc_server_addr"`
     GRPCPort                string `yaml:"grpc_port"`
     APIGatewayAddr          string `yaml:"api_gateway_addr"`
+    FrontendAddr            string `yaml:"frontend_addr"`
     OrderServiceLogFile     string `yaml:"order_service_log_file"`
     PaymentServiceLogFile   string `yaml:"payment_service_log_file"`
     RetryCount              int    `yaml:"retry_count"`

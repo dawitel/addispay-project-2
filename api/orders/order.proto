@@ -12,10 +12,19 @@ message OrderRequest {
     string callback_url   = 6   [json_name="callback_url"];
 }
 
-message OrderResponse {
-    string order_id = 1;
-    string status = 2;
-    string message = 3;
+message TransactionResponseForOrder {
+    string transaction_id = 1 [json_name="transaction_id"];
+    string order_id = 2 [json_name="order_id"];
+    string cust_id = 3 [json_name="cust_id"];
+    double amount = 4 [json_name="amount"];
+    string status = 5 [json_name="status"];
+    string timestamp = 6 [json_name="timestamp"];
+    string message = 7 [json_name="message"];
+  }
+  
+  message OrderResponse {
+    string status = 1 [json_name="status"];
+    string message = 2 [json_name="message"];
 }
 
 service OrderService {

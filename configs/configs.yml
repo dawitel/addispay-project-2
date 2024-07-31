@@ -1,16 +1,22 @@
 dev_pulsar_url: "pulsar://localhost:6650"
 prod_pulsar_url: "pulsar+ssl://pandio--starter-147.us-east-1.aws.pulsar.pandio.com:6651"
+
 orders_topic: "orders"
 transactions_topic: "transactions"
 orders_log_topic: "order-log"
 payments_log_topic: "paymernt-log"
+
 payments-log-subscription: "payments-log-subscription"
 orders-log-subscription: "order-logs-subscription"
+
 grpc_server_addr: "localhost:50051"
 grpc_port: ":50051"
 api_gateway_addr: "localhost:8080"
+frontend_addr: "localhost:3000"
+
 order_service_log_file: "logs/order_service.log"
 payment_service_log_file: "logs/payment_service.log"
+
 retry_count: 3
 retry_interval: 30 # in seconds
 expiry_time: 120 # in seconds, 2 minutes

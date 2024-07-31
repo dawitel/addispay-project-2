@@ -38,3 +38,16 @@ test:
 # Full build process
 .PHONY: all
 all: tools proto build
+
+runorder:
+	@./bin/order_service
+
+runpayment:
+	@./bin/payment_service
+
+runlogger:
+	@./bin/logger_service
+
+rungateway:
+	@./bin/APIclient
+	

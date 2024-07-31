@@ -2,7 +2,9 @@ package order
 
 import (
 	"context"
+	"encoding/json"
 
+	// "github.com/dawitel/addispay-project-2/api/orders/pb"
 	"github.com/dawitel/addispay-project-2/configs"
 	"github.com/dawitel/addispay-project-2/internal/models"
 
@@ -82,4 +84,52 @@ func PublishLogs(logMessage *models.OrderLogMessage) error {
 
     _, err = producer.Send(context.Background(), &msg)
     return err
+}
+
+
+func ConsumeOrderResponse(){
+    // Load configuration files to the environment
+	config, err := configs.LoadConfig()
+    if err != nil {
+        logger.Error("Could not load configuration files")
+    }
+    // Create a consumer
+    consumer, err := pulsarClient.Subscribe(pulsar.ConsumerOptions{
+        Topic: config.TransactionsTopic,
+        SubscriptionName: "order-response-subscription",
+        Type: pulsar.Shared,
+    })
+    if err!= nil {
+        logger.Error("Could not create consumer: ", err)
+    }
+    defer consumer.Close()
+
+    
+    for {
+        msg, err := consumer.Receive(context.Background())
+        if err != nil {
+            logger.Error("Could not receive processed orders messages: ", err)
+            continue
+        }
+
+        var txn models.Transaction
+        if err := json.Unmarshal(msg.Payload(), &txn); err != nil {
+            logger.Error("Could not unmarshal processed transation message: ", err)
+            consumer.Ack(msg)
+            continue
+        }
+
+        logger.Success("Received order:", txn.OrderID)
+       
+        // Process the order response
+        ProcessOrderResults(&txn)
+
+        // // Publish transaction logs 
+        // if err := PublishLogs(logMessage); err != nil{
+        //     logger.Error("Failed to publish transaction logs: ", err)
+        // }
+        // // Acknowledge the message
+        consumer.Ack(msg)
+    }
+
 }

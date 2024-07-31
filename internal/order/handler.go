@@ -45,7 +45,7 @@ func (s *Service) CreateOrder(ctx context.Context, req *pb.OrderRequest) (*pb.Or
         return nil, status.Error(codes.Internal, "Failed to publish order")
     }
 
-    logger.Success("Order created successfully:", orderID)
+    logger.Success("Order created successfully: ", orderID)
     return &pb.OrderResponse{
         Status:  "success",
         Message: "Order created successfully",

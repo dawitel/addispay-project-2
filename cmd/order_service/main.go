@@ -24,6 +24,8 @@ func main() {
     if err := db.InitDB(); err != nil {
         logger.Error("Failed to initialize database: ", err)
     }
+    
+    logger.Success("Initialize connection to DB: ")
 
     if err := order.InitPulsar(); err != nil {
         logger.Error("Failed to initialize Pulsar client: ", err)
