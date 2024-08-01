@@ -37,7 +37,7 @@ func ProcessPayment(order *models.Order) *models.Transaction {
 
         if time.Since(startTime) > 2*time.Minute {
             transaction.Status = "EXPIRED"
-            transaction.Message = "Transaction expired after retries."
+            transaction.Message = "Transaction expired after 3 retries."
             break
         }
     }

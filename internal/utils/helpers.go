@@ -20,7 +20,7 @@ func RandomSuccess() bool {
     rand.Seed(time.Now().UnixNano())
     return rand.Intn(10) < 7 // 70% success rate
 }
-
+// GoDotEnvVariable loads environment variables identified by a unique key
 func GoDotEnvVariable(key string) string {
   err := godotenv.Load(".env")
   if err != nil {

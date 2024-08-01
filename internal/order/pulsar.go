@@ -13,7 +13,7 @@ import (
 
 var pulsarClient pulsar.Client
 
-// InitPulsar initializes the Pulsar client.
+// InitPulsar initializes a Pulsar client for the order service.
 func InitPulsar() error {
     config, err := configs.LoadConfig()
     if err != nil {

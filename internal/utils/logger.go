@@ -29,12 +29,12 @@ func NewLogger(level string) *Logger {
     return &Logger{logger}
 }
 
-// GetLogger returns the logger instance
+// GetLogger returns a logger instance
 func GetLogger() *Logger {
     return logger
 }
 
-// Infologs informational general messages
+// Info logs informational messages
 func (l *Logger) Info(v ...interface{}) {
     l.SetPrefix("[INFO]: ")
     l.Println(v...)

@@ -9,7 +9,9 @@ import (
     "google.golang.org/grpc/codes"
     "google.golang.org/grpc/status"
 )
+
 var logger = utils.GetLogger()
+
 // Service implements the OrderServiceServer interface defined in order.proto.
 type Service struct {
     pb.UnimplementedOrderServiceServer
@@ -47,7 +49,7 @@ func (s *Service) CreateOrder(ctx context.Context, req *pb.OrderRequest) (*pb.Or
 
     logger.Success("Order created successfully: ", orderID)
     return &pb.OrderResponse{
-        Status:  "success",
+        Status:  "SUCCESS",
         Message: "Order created successfully",
     }, nil
 }
