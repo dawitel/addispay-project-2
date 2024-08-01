@@ -5,8 +5,8 @@ services:
     build: .
     entrypoint: ["/app/order_service"]
     environment:
-      - MYSQL_DSN=user:password@tcp(mysql:3306)/my_database
-      - PULSAR_URL=pulsar://pulsar:6650
+      - MYSQL_DSN=root:password@tcp(127.0.0.1:3306)/addispay
+      - PULSAR_URL=pulsar+ssl://pandio--starter-147.us-east-1.aws.pulsar.pandio.com:6651
       - GRPC_PORT=:50051
       - LOG_FILE=/logs/order_service.log
     volumes:
@@ -19,8 +19,23 @@ services:
     build: .
     entrypoint: ["/app/payment_service"]
     environment:
-      - MYSQL_DSN=user:password@tcp(mysql:3306)/my_database
-      - PULSAR_URL=pulsar://pulsar:6650
+      - MYSQL_DSN=root:password@tcp(127.0.0.1:3306)/addispay
+      - PULSAR_URL=pulsar+ssl://pandio--starter-147.us-east-1.aws.pulsar.pandio.com:6651
+      - LOG_FILE=/logs/payment_service.log
+    volumes:
+      - ./configs:/app/configs
+    depends_on:
+      - mysql
+      - pulsar
+
+  api_client:
+    build: .
+    entrypoint: ["/app/api_client"]
+    environment:
+      - MYSQL_DSN=root:password@tcp(127.0.0.1:3306)/addispay
+      - PULSAR_URL=pulsar+ssl://pandio--starter-147.us-east-1.aws.pulsar.pandio.com:6651
+    volumes:
+      - ./configs:/app/configs
     depends_on:
       - mysql
       - pulsar
@@ -29,26 +44,31 @@ services:
     build: .
     entrypoint: ["/app/logger_service"]
     environment:
-      - PULSAR_URL=pulsar://pulsar:6650
+      - MYSQL_DSN=root:password@tcp(127.0.0.1:3306)/addispay
+      - PULSAR_URL=pulsar+ssl://pandio--starter-147.us-east-1.aws.pulsar.pandio.com:6651
     depends_on:
       - pulsar
+    volumes:
+      - ./configs:/app/configs
+
 
   mysql:
     image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: my_database
+      MYSQL_DATABASE: addispay
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-
+      
   pulsar:
     image: apachepulsar/pulsar:2.8.1
     command: ["bin/pulsar", "standalone"]
     ports:
       - "6650:6650"
       - "8080:8080"
+
 
 volumes:
   mysql_data:

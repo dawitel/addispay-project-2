@@ -8,6 +8,7 @@ payments_log_topic: "paymernt-log"
 
 payments-log-subscription: "payments-log-subscription"
 orders-log-subscription: "order-logs-subscription"
+order-response-subscription: "order-response-subscription"
 
 grpc_server_addr: "localhost:50051"
 grpc_port: ":50051"

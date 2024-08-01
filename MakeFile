@@ -23,8 +23,16 @@ proto: $(PROTO_FILES)
 # Build the Go project
 .PHONY: build
 build: proto
-	go build -o bin/server ./cmd/grpc_server
+	@./scripts/services_build.sh
 
+# Build docker images
+build_docker:
+	@./scripts/build_images.sh
+
+# run services
+run_services:
+	@./scripts/services_run.sh
+	
 # Clean up generated files and build artifacts
 .PHONY: clean
 clean:

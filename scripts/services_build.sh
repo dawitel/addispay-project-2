@@ -14,6 +14,6 @@ go build -o bin/logger_service cmd/logger_service/main.go
 
 # Build API Client
 echo "Building API Client..."
-go build -o bin/APIclient cmd/client/main.go
+go build -o bin/api_gateway cmd/client/main.go
 
 echo "Build completed."

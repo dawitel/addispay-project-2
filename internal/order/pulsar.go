@@ -87,7 +87,7 @@ func PublishLogs(logMessage *models.OrderLogMessage) error {
 }
 
 
-func ConsumeOrderResponse(){
+func ConsumeOrderResponse() {
     // Load configuration files to the environment
 	config, err := configs.LoadConfig()
     if err != nil {
@@ -96,7 +96,7 @@ func ConsumeOrderResponse(){
     // Create a consumer
     consumer, err := pulsarClient.Subscribe(pulsar.ConsumerOptions{
         Topic: config.TransactionsTopic,
-        SubscriptionName: "order-response-subscription",
+        SubscriptionName: config.OrderResponseSubscription,
         Type: pulsar.Shared,
     })
     if err!= nil {

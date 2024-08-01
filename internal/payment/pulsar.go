@@ -12,19 +12,27 @@ import (
 
 var pulsarClient pulsar.Client
 
-// InitPulsar initializes the Pulsar client.
-func InitPulsar(pulsarURL string) error {
+// InitPulsar initializes a Pulsar client for the payment service.
+func InitPulsar() error {
+     // Load configuration
+    config, err := configs.LoadConfig()
+    if err != nil {
+        logger.Error("Failed to load config: ", err)
+    }
+
     client, err := pulsar.NewClient(pulsar.ClientOptions{
-        URL: pulsarURL,
+        URL: config.ProductionPulsarURL,
     })
+    
     if err != nil {
         return err
     }
+    
     pulsarClient = client
     return nil
 }
 
-// ConsumeOrders consumes order messages from the specified Pulsar topic and processes them.
+// ConsumeOrders consumes order messages from the orders Pulsar topic and processes them.
 func ConsumeOrders(topic string) {
     consumer, err := pulsarClient.Subscribe(pulsar.ConsumerOptions{
         Topic:            topic,

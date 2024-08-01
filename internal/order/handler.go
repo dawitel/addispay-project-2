@@ -41,7 +41,7 @@ func (s *Service) CreateOrder(ctx context.Context, req *pb.OrderRequest) (*pb.Or
 
     // Publish order to Pulsar
     if err := PublishOrder(orderModel); err != nil {
-        logger.Error("Failed to publish order:", err)
+        logger.Error("Failed to publish order: ", err)
         return nil, status.Error(codes.Internal, "Failed to publish order")
     }
 

@@ -41,7 +41,7 @@ func ProcessOrderResults(txn *models.Transaction) {
 		logger.Error("Failed to marshal the transactions response: ", err)
 	}
 
-	URL := fmt.Sprintf("%s/processed-transactions", config.APIGatewayAddr)
+	URL := fmt.Sprintf("%s/api/v1/processed-transactions", config.APIGatewayAddr)
 	
 	// send the JSON data to the API gateway
 	response, err := http.Post(URL, "application/json", bytes.NewBuffer(orderResponseJSON))

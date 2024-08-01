@@ -8,6 +8,8 @@ import (
 
 var logger = utils.GetLogger()
 
+// InitPulsar initializes a new pulsarclient for the logger service and sarts consuming log messages
+// produced by the payment and order services
 func InitPulsar() error {
 	// Load configuration files to the environment
 	config, err := configs.LoadConfig()
@@ -45,7 +47,7 @@ func InitPulsar() error {
     }
     defer orderConsumer.Close()
 
-    logger.Success("Logger service is running and waiting for messages...")
+    logger.Success("Logger service is initialized successfully and waiting for messages...")
 	ConsumePaymentLogs(paymentConsumer)
 	ConsumeOrderLogs(orderConsumer)
 	

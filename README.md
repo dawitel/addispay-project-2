@@ -13,11 +13,10 @@ This project implements an order processing and payment system using Apache Puls
 
 1. [Overview](#overview)
 2. [Architecture](#architecture)
-3. [Getting Started](#getting-started)
-4. [Usage](#usage)
-5. [Testing](#testing)
-6. [Deployment](#deployment)
-7. [License](#license)
+3. [Usage](#usage)
+4. [Testing](#testing)
+5. [Deployment](#deployment)
+6. [License](#license)
 
 ## Overview
 
@@ -43,97 +42,6 @@ The architecture of this system involves several components working together:
 ![Architecture Diagram](docs/architecture.svg)
 For more detail on the undelying architecture, thought processes, things that i learned, and components, see the [Architecture](docs/architecture.md) document.
 
-## Getting Started
-
-### Prerequisites
-
-- **Docker** and **Docker Compose** installed on your machine.
-- **Go** (1.19 or higher) for local development and testing.
-- **Pulsar CLI** for managing Pulsar functions.
-- **Pulsar Admin CLI** for managing Pulsar topics.
-- **make and protoc** for building and facilitating CLI activities.
-
-
-### Setup
-
-1. **Clone the repository**:
-    ```sh
-    git clone https://github.com/dawitel/addispay-project.git
-    cd order-payment-system
-    ```
-
-2. **Build the Docker images**:
-    ```sh
-    cd scripts && ./build.sh
-    ```
-
-3. **Start the services**:
-    ```sh
-    cd scripts && ./start.sh
-    ```
-
-4. **Deploy Pulsar functions**:
-    ```sh
-    cd scripts && ./deploy_pulsar_functions.sh
-    ```
-
-## Project Structure
-
-```
-.
-├── cmd
-│   ├── order_service
-│   │   └── main.go
-│   ├── payment_service
-│   │   └── main.go
-│   └── logger_service
-│       └── main.go
-├── config
-│   ├── config.go
-│   └── config.yaml
-├── internal
-│   ├── order
-│   │   └── order_handler.go
-│   ├── payment
-│   │   └── payment_handler.go
-│   └── log
-│       └── consumer.go
-├── models
-│   ├── log_entry.go
-│   └── log_message.go
-├── scripts
-│   ├── start.sh
-│   └── stop.sh
-├── Dockerfile
-├── docker-compose.yml
-└── README.md
-```
-
-
-### 3. Environment Variables
-
-Ensure that the following environment variables are set in your Docker Compose file or your environment:
-
-- `MYSQL_DSN`: The Data Source Name for connecting to MySQL, e.g., `user:password@tcp(mysql:3306)/my_database`.
-- `PULSAR_URL`: The URL for the Apache Pulsar instance, e.g., `pulsar://localhost:6650`.
-- `GRPC_PORT`: The gRPC server port for the Order Service, e.g., `:50051`.
-- `LOG_FILE`: File path for logging.
-
-### 4. Running the Scripts
-
-Use the provided scripts for managing the services.
-
-#### Starting Services
-
-```bash
-./scripts/start.sh
-```
-
-#### Stopping Services
-
-```bash
-./scripts/stop.sh
-```
 
 ## Usage
 
@@ -148,7 +56,7 @@ Use the provided scripts for managing the services.
 
 ### Logger Service
 
-- **Functionality**: Consumes log messages from the `logs-topic`, processes them, and stores them in MySQL.
+- **Functionality**: Consumes log messages from the `transactions-logs-topic`,and `order-logs-topic` processes them, and stores them in MySQL.
 
 ## Database
 
@@ -157,9 +65,27 @@ Use the provided scripts for managing the services.
 - **Setup**: The MySQL instance is defined in `docker-compose.yml`.
 - **Data Storage**: Log entries are stored in the `log_entries` table.
 
-## Contributing
+## pre-requisites
+- Go 1.22.0 or above
+- Docker
+- protoc compiler
+- make to run the services
+- genome (optional) to run services simulenously
 
-Contributions are welcome! Please open an issue or submit a pull request.
+## Get started
+1. clone the repo
+```bash
+git clone github.com/dawitel/addispay-project-2.git .
+```
+2. Build the images if you want
+```bash
+make build_docker
+```
+3. Build the files to run them locally(without docker)
+```bash
+make run_services
+```
+
 
 ## License
 
@@ -167,4 +93,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-For questions or support, please contact [your-email@example.com](mailto:your-email@example.com).
+For questions or support, please contact [dawiteliaskassaye@gmail.com](mailto:dawiteliaskassaye@gmail.com).

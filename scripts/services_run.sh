@@ -1,18 +1,15 @@
 #!/bin/bash
 
-# Source environment variables
-source ./scripts/setup_env.sh
+echo "Starting services"
+# Start the API gateway 
+bash ./bin/api_client
 
-# Start the Order Service
-echo "Starting Order Service..."
-go run cmd/order_service/main.go &
+# Start the order Service
+gnome-terminal -- bash -c "./bin/order_service; exec bash"
 
 # Start the Payment Service
-echo "Starting Payment Service..."
-go run cmd/payment_service/main.go &
+gnome-terminal -- bash -c "./bin/payment_service; exec bash"
 
 # Start the Logger Service
-echo "Starting Logger Service..."
-go run cmd/logger_service/main.go &
+gnome-terminal -- bash -c "./bin/logger_service; exec bash"
 
-echo "All services started."

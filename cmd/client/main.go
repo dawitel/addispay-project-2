@@ -24,8 +24,8 @@ func main() {
         logger.Error("Failed to load config: ", err)
     }
 	mux := http.NewServeMux()
-	mux.HandleFunc("/v1/checkout", APIgatewayHandler)
-	mux.HandleFunc("/processed-transactions", OrderResponseHandler)
+	mux.HandleFunc("/api/v1/checkout", APIgatewayHandler)
+	mux.HandleFunc("api/v1/processed-transactions", OrderResponseHandler)
 	srv := &http.Server{
 		Addr: config.APIGatewayAddr,
 		Handler: mux,
@@ -41,13 +41,14 @@ func main() {
 
 }
 
+// APIgatewayHandler handles order requests made form the fontend
 func APIgatewayHandler(w http.ResponseWriter, r *http.Request) {
 	config, err := configs.LoadConfig()
     if err != nil {
 		logger.Error("Failed to load configuration files: ", err)
     }
 
-	// Set up a connection to the server.
+	// Set up a connection to the server.[ gRPC.Dial() <- deprecated ]
 	conn, err := grpc.NewClient(config.GrpcServerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
 	if err != nil {
 		log.Fatalf("Could not connect to the order service: %v", err)
@@ -71,7 +72,7 @@ func APIgatewayHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Order Response: %s", resp.GetStatus())
 }
 
-
+// OrderResponseHandler handles requests from the order service that are made after processing the requests
 func OrderResponseHandler(w http.ResponseWriter, r *http.Request) {
 	config, err := configs.LoadConfig()
     if err != nil {

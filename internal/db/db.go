@@ -6,7 +6,9 @@ import (
 )
 
 var db *sql.DB
-// InitDB initializes the database connection.
+var logger = utils.GetLogger()
+
+// InitDB initializes a database connection for the services.
 func InitDB() error {
     dsn := utils.GoDotEnvVariable("mysql_dsn")
     var err error
@@ -14,5 +16,6 @@ func InitDB() error {
     if err != nil {
         return err
     }
+    logger.Success("Initialized connection to database successfully")
     return db.Ping()
 }
