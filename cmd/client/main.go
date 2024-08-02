@@ -26,6 +26,8 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/v1/checkout", APIgatewayHandler)
 	mux.HandleFunc("api/v1/processed-transactions", OrderResponseHandler)
+	
+	mux.HandleFunc("/api/v1/notifications", APIgatewayHandler)
 	srv := &http.Server{
 		Addr: config.APIGatewayAddr,
 		Handler: mux,

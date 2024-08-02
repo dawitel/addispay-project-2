@@ -5,6 +5,7 @@ orders_topic: "orders"
 transactions_topic: "transactions"
 orders_log_topic: "order-log"
 payments_log_topic: "paymernt-log"
+wallet_updates_topic: "wallet-updates"
 
 payments-log-subscription: "payments-log-subscription"
 orders-log-subscription: "order-logs-subscription"

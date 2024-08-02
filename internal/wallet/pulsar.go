@@ -52,11 +52,32 @@ func ConsumeOrderResponseForWalletService() {
 		// Process the wallet data
 		ProcessWalletData(&txn)
 
-		// notify merchant about the new transaction
-		
-
 		// Acknowledge the message
 		consumer.Ack(msg)
 	}
 
+}
+
+// PublishWalletUpdates publishes the wallet updates for a merchant to the wallet-update-topic
+// then the notification service picks up the message and notifies the merchant about the order
+func PublishWalletUpdates(walletData *models.Wallet) error {
+	config, err := configs.LoadConfig()
+    if err != nil {
+        logger.Error("Could not load configuration files: ", err)
+    }
+    producer, err := pulsarClient.CreateProducer(pulsar.ProducerOptions{
+        Topic: config.WalletUpdatesTopic,
+    })
+    if err != nil {
+        return err
+    }
+    defer producer.Close()
+
+
+    msg := pulsar.ProducerMessage{
+        Payload: []byte(walletData.WDToJSON()),
+    }
+
+    _, err = producer.Send(context.Background(), &msg)
+    return err
 }

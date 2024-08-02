@@ -5,18 +5,23 @@ option go_package = "/pb";
 
 message Merchant {
   repeated Product products = 1 [json_name="products"]; 
-  string merchant_id = 2 [json_name="merchant_id"];
-  string merchant_name = 3 [json_name="merchant_name"];
+  string merchant_id    = 2 [json_name="merchant_id"];
+  string merchant_name  = 3 [json_name="merchant_name"];
+  string merchant_email = 4 [json_name="merchant_email"];
+  string merchant_phone = 5 [json_name="merchant_phone"];
+  double total_revenue  = 6 [json_name="total_revenue"];
+	double total_profit   = 7 [json_name="total_profit"];
+	double number_of_sales = 9 [json_name="number_of_sales"];
 }
 
 message Product {
-  string product_id = 1 [json_name="product_id"];
-  string product_name = 2 [json_name="product_name"];
-  string product_price = 3 [json_name="product_price"];
+  string product_id     = 1 [json_name="product_id"];
+  string product_name   = 2 [json_name="product_name"];
+  string product_price  = 3 [json_name="product_price"];
 }
 
 message ProductAmount {
-  Product product = 1 [json_name="product"];
+  Product product        = 1 [json_name="product"];
   int64   product_amount = 2 [json_name="product_ammount"];
 }
 
@@ -31,16 +36,16 @@ message OrderRequest {
 }
 
 message TransactionResponseForOrder {
-    Merchant merchant       = 1   [json_name="merchant"];
-    string transaction_id = 2 [json_name="transaction_id"];
+    Merchant merchant          = 1 [json_name="merchant"];
+    string transaction_id      = 2 [json_name="transaction_id"];
     OrderRequest order_request = 3 [json_name="order_request"];
-    string status = 4 [json_name="status"];
-    string timestamp = 5 [json_name="timestamp"];
-    string message = 6 [json_name="message"];
+    string status              = 4 [json_name="status"];
+    string timestamp           = 5 [json_name="timestamp"];
+    string message             = 6 [json_name="message"];
   }
   
   message OrderResponse {
-    string status = 1 [json_name="status"];
+    string status  = 1 [json_name="status"];
     string message = 2 [json_name="message"];
 }
 

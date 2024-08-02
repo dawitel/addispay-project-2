@@ -20,6 +20,7 @@ type Config struct {
     TransactionsTopic       string `yaml:"transactions_topic"`
     OrdersLogTopic          string `yaml:"orders_log_topic"`
     PaymentsLogTopic        string `yaml:"payments_log_topic"`
+    WalletUpdatesTopic    string `yaml:"wallet_updates_topic"`
     PaymentsLogSubscription string `yaml:"payments-log-subscription"`
     OrdersLogSubscription   string `yaml:"orders-log-subscription"`
     OrderResponseSubscription   string `yaml:"order-response-subscription"`

@@ -26,8 +26,7 @@ func ProcessWalletData(txn *models.Transaction) {
 	}
 	// save wallet data to database
 	SaveWalletData(walletData)
-}
 
-func NotifyMerchant() {
-	
+	// publish the data to the wallet-update topic to notify merchant about the new transaction
+	PublishWalletUpdates(walletData)
 }

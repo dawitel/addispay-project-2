@@ -1,9 +1,10 @@
 package models
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 // import "time"
-
 
 type OrderLogMessage struct {
     Merchant          Merchant `json:"merchant"`
@@ -15,6 +16,7 @@ type OrderLogMessage struct {
     ProductAmount     ProductAmount `json:"product_amount"`
     TotalAmount       float64  `json:"total_amount"`
     LogLevel          string   `json:"log_level"`
+    Timestamp         string   `json:"time_stamp"`
 }
 
 func (o *OrderLogMessage) OrderLogToJSON() string {

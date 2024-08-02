@@ -26,10 +26,10 @@ func ConsumeOrderLogs(consumer pulsar.Consumer) {
 			continue
 		}
 
-		WriteOrderLogToLogFile(logMessage)
+		WriteOrderLogToLogFile(&logMessage)
 
 		// Save log message to database
-		if err = SaveOrderLogToDB(logMessage); err != nil {
+		if err = SaveOrderLogToDB(&logMessage); err != nil {
 			logger.Error("Could not save to DB: ", err)
 		}
 
@@ -65,7 +65,7 @@ func ConsumePaymentLogs(consumer pulsar.Consumer) {
 	}
 }
 
-func WriteOrderLogToLogFile(logMessage models.OrderLogMessage){
+func WriteOrderLogToLogFile(logMessage *models.OrderLogMessage){
 	
 		// Open the log file
 		logFile, err := os.OpenFile("logs/order_service.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
@@ -77,7 +77,7 @@ func WriteOrderLogToLogFile(logMessage models.OrderLogMessage){
 		// Set the output of the default logger to the log file
 		log.SetOutput(logFile)
 
-		log.Printf("[LOG]: %s %s %s %s %f %s %s", logMessage.Timestamp, logMessage.OrderID, logMessage.CustID, logMessage.Status, logMessage.Amount, logMessage.LogLevel, logMessage.Message)
+		log.Printf("[LOG]: %s %s %s %f %s", logMessage.Merchant.MerchantId, logMessage.OrderID, logMessage.CustID, logMessage.TotalAmount, logMessage.ProductAmount.Product.ProductName)
 	
 }
 func writePaymentLogToFile(logMessage models.PaymentLogMessage){
@@ -91,5 +91,5 @@ func writePaymentLogToFile(logMessage models.PaymentLogMessage){
 		// Set the output of the default logger to the log file
 		log.SetOutput(logFile)
 		
-		log.Printf("[LOG]: %s %s %s %s %s %f %s %s", logMessage.Timestamp, logMessage.TransactionID, logMessage.OrderID, logMessage.CustID, logMessage.Status, logMessage.Amount, logMessage.Message, logMessage.LogLevel)
+		log.Printf("[LOG]: %s %s %s %s %s %f %s %s", logMessage.Timestamp, logMessage.TransactionID, logMessage.OrderRequest.OrderID, logMessage.OrderRequest.CustID, logMessage.Status, logMessage.OrderRequest.TotalAmount, logMessage.Message, logMessage.LogLevel)
 }
