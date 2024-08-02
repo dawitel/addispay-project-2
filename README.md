@@ -25,8 +25,9 @@ This project consists of three backend services implemented in Golang:
 1. **Order Service**: Handles order processing requests and interacts with the Payment Service.
 2. **Payment Service**: Simulates payment processing and publishes transaction results.
 3. **Logger Service**: Consumes log messages from a Pulsar topic and stores them in a MySQL database.
+4. **Notification Service**: Consumes updatemessages from the merchant wallet updates topic and sends push notifications to the merchant email and phone number.
 
-The services communicate through Apache Pulsar, a distributed messaging and streaming platform. Log messages are centralized and managed by the Logger Service, which persists them in a MySQL database.
+The services communicate through Apache Pulsar, a distributed messaging and streaming platform. Log messages are centralized and managed by the Logger Service, which persists them in a MySQL database and a log file.
 
 ## Architecture
 
@@ -36,6 +37,7 @@ The architecture of this system involves several components working together:
 - **gRPC Server**: Forwards order requests to the order processing system.
 - **Apache Pulsar**: Facilitates messaging between the services.
 - **MySQL**: Stores entire sytem data(logs, orders, transactions).
+- **The services**: the services are layered in a clean architecture manner and respecting the idiomatic code writting approach of golang.
 
 ### Architecture Diagram
 
