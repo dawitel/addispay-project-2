@@ -6,11 +6,10 @@ import (
 
 // Transaction represents a transaction structure.
 type Transaction struct {
+    Merchant      Merchant `json:"merchant"`
     TransactionID string  `json:"transaction_id"`
-    CustID        string  `json:"cust_id"`
-    OrderID       string  `json:"order_id"`
+    OrderRequest  Order   `json:"order_request"`
     Status        string  `json:"status"`
-    Amount        float64 `json:"amount"`
     Timestamp     string  `json:"timestamp"`
     Message       string  `json:"message,omitempty"`
 }

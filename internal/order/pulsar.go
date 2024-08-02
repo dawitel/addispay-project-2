@@ -124,11 +124,7 @@ func ConsumeOrderResponse() {
         // Process the order response
         ProcessOrderResults(&txn)
 
-        // // Publish transaction logs 
-        // if err := PublishLogs(logMessage); err != nil{
-        //     logger.Error("Failed to publish transaction logs: ", err)
-        // }
-        // // Acknowledge the message
+        // Acknowledge the message
         consumer.Ack(msg)
     }
 

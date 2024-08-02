@@ -6,12 +6,19 @@ import (
 
 // Order represents an order structure.
 type Order struct {
-    OrderID     string  `json:"order_id"`
-    CustID      string  `json:"cust_id"`
-    CustBankAcc string  `json:"cust_bank_acc"` 
-    Amount      float64 `json:"amount"`
-    PhoneNumber string  `json:"phone_number"`
-    CallbackURL string  `json:"callback_url"`
+    Merchant          Merchant `json:"merchant"`
+    OrderID           string   `json:"order_id"`
+    CustID            string   `json:"cust_id"`
+    CustName          string   `json:"cust_name"`
+    PhoneNumber       string   `json:"phone_number"`
+    CustBankAcc       string   `json:"cust_bank_acc"` 
+    ProductAmount     ProductAmount `json:"product_amount"`
+    TotalAmount       float64  `json:"total_amount"`
+}
+
+type ProductAmount struct {
+    Product        Product `json:"product"`
+    ProductAmount  int `json:"product_amount"`
 }
 
 // ToJSON converts the Order to a JSON string.

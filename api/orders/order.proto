@@ -3,23 +3,40 @@ syntax = "proto3";
 package order;
 option go_package = "/pb";
 
+message Merchant {
+  repeated Product products = 1 [json_name="products"]; 
+  string merchant_id = 2 [json_name="merchant_id"];
+  string merchant_name = 3 [json_name="merchant_name"];
+}
+
+message Product {
+  string product_id = 1 [json_name="product_id"];
+  string product_name = 2 [json_name="product_name"];
+  string product_price = 3 [json_name="product_price"];
+}
+
+message ProductAmount {
+  Product product = 1 [json_name="product"];
+  int64   product_amount = 2 [json_name="product_ammount"];
+}
 
 message OrderRequest {
-    string cust_id        = 2   [json_name="cust_id"];
-    string cust_bank_acc  = 3   [json_name="cust_bank_acc"];
-    double amount         = 4   [json_name="amount"];
-    string phone_number   = 5   [json_name="phone_number"];
-    string callback_url   = 6   [json_name="callback_url"];
+    Merchant merchant       = 1   [json_name="merchant"];
+    string   cust_id        = 2   [json_name="cust_id"];
+    string   cust_name      = 3   [json_name="cust_name"];
+    string   phone_number   = 4   [json_name="phone_number"];
+    string   cust_bank_acc  = 5   [json_name="cust_bank_acc"];
+    double   total_amount   = 6   [json_name="total_amount"];
+    ProductAmount product_amount = 7 [json_name="product_amount"];  
 }
 
 message TransactionResponseForOrder {
-    string transaction_id = 1 [json_name="transaction_id"];
-    string order_id = 2 [json_name="order_id"];
-    string cust_id = 3 [json_name="cust_id"];
-    double amount = 4 [json_name="amount"];
-    string status = 5 [json_name="status"];
-    string timestamp = 6 [json_name="timestamp"];
-    string message = 7 [json_name="message"];
+    Merchant merchant       = 1   [json_name="merchant"];
+    string transaction_id = 2 [json_name="transaction_id"];
+    OrderRequest order_request = 3 [json_name="order_request"];
+    string status = 4 [json_name="status"];
+    string timestamp = 5 [json_name="timestamp"];
+    string message = 6 [json_name="message"];
   }
   
   message OrderResponse {

@@ -21,7 +21,7 @@ func ProcessPayment(order *models.Order) *models.Transaction {
     }
 
     maxRetries := 3
-    retryInterval := 30 * time.Second
+    retryInterval := 30 * time.Second // use exponential back off strategy for the retry itervals -> f(n) = 2^n
     startTime := time.Now()
     for i := 0; i < maxRetries; i++ {
         // Simulate payment processing

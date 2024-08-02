@@ -6,13 +6,15 @@ import "encoding/json"
 
 
 type OrderLogMessage struct {
-    OrderID     string `json:"order_id"`
-    CustID      string `json:"cust_id"`
-    Status      string `json:"status"`
-    Amount      float64 `json:"amount"`
-    Timestamp   string `json:"timestamp"` // TODO: move from string -> time.Time
-    LogLevel    string `json:"logLevel"`
-    Message     string `json:"message"`
+    Merchant          Merchant `json:"merchant"`
+    OrderID           string   `json:"order_id"`
+    CustID            string   `json:"cust_id"`
+    CustName          string   `json:"cust_name"`
+    PhoneNumber       string   `json:"phone_number"`
+    CustBankAcc       string   `json:"cust_bank_acc"` 
+    ProductAmount     ProductAmount `json:"product_amount"`
+    TotalAmount       float64  `json:"total_amount"`
+    LogLevel          string   `json:"log_level"`
 }
 
 func (o *OrderLogMessage) OrderLogToJSON() string {
@@ -21,14 +23,13 @@ func (o *OrderLogMessage) OrderLogToJSON() string {
 }
 
 type PaymentLogMessage struct {
-    TransactionID string `json:"transaction_id"`
-    OrderID     string   `json:"order_id"`
-    CustID      string   `json:"cust_id"`
-    Status      string   `json:"status"` // -> EXPIRED, FAILED, SUCCESS, PENDING
-    Amount      float64  `json:"amount"`
-    Timestamp   string   `json:"timestamp"` // TODO: move from string -> time.Time
-    LogLevel    string   `json:"logLevel"`
-    Message     string   `json:"message,omitempty"`
+    Merchant      Merchant `json:"merchant"`
+    TransactionID string   `json:"transaction_id"`
+    OrderRequest  Order    `json:"order_request"`
+    Status        string   `json:"status"`
+    Timestamp     string   `json:"timestamp"`
+    Message       string   `json:"message,omitempty"`
+    LogLevel      string   `json:"log_level"`
 }
 
 func (p *PaymentLogMessage) PaymentLogToJSON() string {
