@@ -41,7 +41,7 @@ The architecture of this system involves several components working together:
 
 ### Architecture Diagram
 
-![Architecture Diagram](docs/architecture.svg)
+![Architecture Diagram](https://app.eraser.io/workspace/3GkpJpHxBOXldxkJWkew?origin=share)
 For more detail on the undelying architecture, thought processes, things that i learned, and components, see the [Architecture](docs/architecture.md) document.
 
 
