@@ -41,7 +41,7 @@ func (l *Logger) Info(v ...interface{}) {
 }
 // Success logs success messages
 func (l *Logger) Success(v ...interface{}) {
-    l.SetPrefix("☑[SUCCESS]: ")
+    l.SetPrefix("☑ [SUCCESS]: ")
     l.Println(v...)
 }
 

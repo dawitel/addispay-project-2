@@ -25,9 +25,7 @@ func main() {
         logger.Error("Failed to initialize connection to database: ", err)
     }
 
-    if err := order.InitPulsar(); err != nil {
-        logger.Error("Failed to initialize Pulsar client: ", err)
-    }
+    order.InitPulsar()
 
     lis, err := net.Listen("tcp", config.GRPCPort)
     if err != nil {

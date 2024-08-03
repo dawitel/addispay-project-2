@@ -11,7 +11,6 @@ import (
 	"github.com/apache/pulsar-client-go/pulsar"
 )
 
-var pulsarClient pulsar.Client
 var logger = utils.GetLogger()
 
 // ConsumeOrderResponseForWalletService consumes messages from the processed orders topic 
@@ -19,11 +18,21 @@ var logger = utils.GetLogger()
 func ConsumeOrderResponseForWalletService() {
 	// Load configuration files to the environment
 	config, err := configs.LoadConfig()
-	if err != nil {
-		logger.Error("Could not load configuration files")
-	}
+    if err != nil {
+        logger.Error("Could not load configuration files")
+    }
+
+	client, err := pulsar.NewClient(pulsar.ClientOptions{
+        URL: config.ProductionPulsarURL,
+    })
+    if err != nil {
+        logger.Error("Could not initialize Pulsar client: ", err)
+    }
+    defer client.Close()
+	logger.Success("Pulsar client for wallet service successfully initialized")
+	
 	// Create a consumer
-	consumer, err := pulsarClient.Subscribe(pulsar.ConsumerOptions{
+	consumer, err := client.Subscribe(pulsar.ConsumerOptions{
 		Topic:            config.TransactionsTopic,
 		SubscriptionName: config.OrderResponseSubscription,
 		Type:             pulsar.Shared,
@@ -32,6 +41,7 @@ func ConsumeOrderResponseForWalletService() {
 		logger.Error("Could not create consumer for wallet service: ", err)
 	}
 	defer consumer.Close()
+	logger.Success("wallet service is successfully initialized and consuming messages...")
 
 	for {
 		msg, err := consumer.Receive(context.Background())
@@ -61,11 +71,20 @@ func ConsumeOrderResponseForWalletService() {
 // PublishWalletUpdates publishes the wallet updates for a merchant to the wallet-update-topic
 // then the notification service picks up the message and notifies the merchant about the order
 func PublishWalletUpdates(walletData *models.Wallet) error {
+	// Load configuration files to the environment
 	config, err := configs.LoadConfig()
     if err != nil {
-        logger.Error("Could not load configuration files: ", err)
+        logger.Error("Could not load configuration files")
     }
-    producer, err := pulsarClient.CreateProducer(pulsar.ProducerOptions{
+
+	client, err := pulsar.NewClient(pulsar.ClientOptions{
+        URL: config.ProductionPulsarURL,
+    })
+    if err != nil {
+        logger.Error("Could not initialize Pulsar client: ", err)
+    }
+    defer client.Close()
+    producer, err := client.CreateProducer(pulsar.ProducerOptions{
         Topic: config.WalletUpdatesTopic,
     })
     if err != nil {

@@ -18,7 +18,7 @@ type Order struct {
 
 type ProductAmount struct {
     Product        Product `json:"product"`
-    ProductAmount  int `json:"product_amount"`
+    ProductAmount  int64 `json:"product_amount"`
 }
 
 // ToJSON converts the Order to a JSON string.

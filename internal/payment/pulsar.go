@@ -64,10 +64,8 @@ func ConsumeOrders(topic string) {
         transaction := ProcessPayment(&order)
         logMessage := &models.PaymentLogMessage{
             TransactionID: transaction.TransactionID,
-            OrderID: transaction.OrderID,
-            CustID: transaction.CustID,
+            OrderRequest: transaction.OrderRequest,
             Status: transaction.Status,
-            Amount: transaction.Amount,
             Timestamp: "", // replace to time.Time()
             LogLevel: transaction.Status,
             Message: transaction.Message,

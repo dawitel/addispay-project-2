@@ -27,7 +27,7 @@ func main() {
 	mux.HandleFunc("/api/v1/checkout", APIgatewayHandler)
 	mux.HandleFunc("api/v1/processed-transactions", OrderResponseHandler)
 	
-	mux.HandleFunc("/api/v1/notifications", APIgatewayHandler)
+	mux.HandleFunc("/api/v1/notifications", NotificationsHandler)
 	srv := &http.Server{
 		Addr: config.APIGatewayAddr,
 		Handler: mux,
@@ -94,6 +94,37 @@ func OrderResponseHandler(w http.ResponseWriter, r *http.Request) {
     resp, err := client.Do(req)
     if err != nil {
         http.Error(w, "Failed to forward request", http.StatusInternalServerError)
+        return
+    }
+    defer resp.Body.Close()
+
+    // Copy the response from the forntend client back to the order service processor
+    w.WriteHeader(resp.StatusCode)
+    io.Copy(w, resp.Body)
+}
+
+
+
+// NotificationsHandler handles requests from the wallet service for updating the wallet and sending notifications
+func NotificationsHandler(w http.ResponseWriter, r *http.Request) {
+	config, err := configs.LoadConfig()
+    if err != nil {
+		logger.Error("Failed to load configuration files: ", err)
+    }
+    // Forward the data to the forntend client
+    clientURL := fmt.Sprintf("%s/api/notifications", config.FrontendAddr) // Assuming an endpoint in Next.js to receive data
+    req, err := http.NewRequest("POST", clientURL, r.Body)
+    if err != nil {
+        http.Error(w, "Failed to create request to the Frontend", http.StatusInternalServerError)
+		logger.Error("Failed to create request to the Frontend: ", err)
+        return
+    }
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        http.Error(w, "Failed to forward notificaiton request", http.StatusInternalServerError)
         return
     }
     defer resp.Body.Close()

@@ -1,0 +1,36 @@
+{
+  "merchant": {
+    "products": [
+      {
+        "product_id": "1232qed434qef2",
+        "product_name": "laptop",
+        "product_price": 120.0
+      },
+      {
+        "product_id": "12231cedf4342",
+        "product_name": "laptop",
+        "product_price": 120.0
+      }
+    ],
+    "merchant_id": "23456789087hgbhj",
+    "merchant_name": "Dawit Elias",
+    "merchant_email": "dawiteliaskassaye@gmail.com",
+    "merchant_phone": "0911785953",
+    "total_revenue": 2000.1,
+    "total_profit": 1000.0,
+    "number_of_sales": 4
+  },
+  "cust_id": "12123121",
+  "cust_name": "Dawit Elias",
+  "phone_number": "0983664237",
+  "cust_bank_acc": "1000475499658",
+  "total_amount": 120.0,
+  "product_amount": {
+    "product": {
+      "product_id": "12324342",
+      "product_name": "laptop",
+      "product_price": 120.0
+    },
+    "product_amount": 1
+  }
+}

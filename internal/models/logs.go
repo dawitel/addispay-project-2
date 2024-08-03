@@ -17,6 +17,7 @@ type OrderLogMessage struct {
     TotalAmount       float64  `json:"total_amount"`
     LogLevel          string   `json:"log_level"`
     Timestamp         string   `json:"time_stamp"`
+    Message           string   `json:"message,omitempty"`
 }
 
 func (o *OrderLogMessage) OrderLogToJSON() string {

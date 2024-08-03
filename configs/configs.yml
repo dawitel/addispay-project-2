@@ -8,6 +8,7 @@ payments_log_topic: "paymernt-log"
 wallet_updates_topic: "wallet-updates"
 
 payments-log-subscription: "payments-log-subscription"
+wallet-updates-subscription: "wallet-updates-subscription"
 orders-log-subscription: "order-logs-subscription"
 order-response-subscription: "order-response-subscription"
 

@@ -2,7 +2,6 @@ package order
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/dawitel/addispay-project-2/api/orders/pb"
 	"github.com/dawitel/addispay-project-2/internal/models"
@@ -29,13 +28,14 @@ func (s *Service) CreateOrder(ctx context.Context, req *pb.OrderRequest) (*pb.Or
 
     // Convert gRPC request to internal model
     orderModel := &models.Order{
-        Merchant: req.Merchant,
+        Merchant:    ConvertPBMerchantToModelMerchant(req.Merchant), // TODO: -> type conversion
         OrderID:     orderID,
         CustID:      req.CustId,
         CustBankAcc: req.CustBankAcc,
-        Amount:      req.Amount,
         PhoneNumber: req.PhoneNumber,
-        CallbackURL: req.CallbackUrl,
+        CustName:    req.CustName,
+        ProductAmount: ConvertPBProductAmountToProduct(req.ProductAmount), // TODO -> type conversion
+        TotalAmount: req.TotalAmount,
     }
 
     // Store order in the database
@@ -55,4 +55,38 @@ func (s *Service) CreateOrder(ctx context.Context, req *pb.OrderRequest) (*pb.Or
         Status:  "SUCCESS",
         Message: "Order created successfully",
     }, nil
+}
+
+// ConvertPBMerchantToModelMerchant converts the protocol buffer merchant to the internal merchant model.
+func ConvertPBMerchantToModelMerchant(pbMerchant *pb.Merchant) models.Merchant {
+    // type coversion for the products without conflict
+    products := make([]models.Product, len(pbMerchant.Products))
+    for i, pbProduct := range pbMerchant.Products {
+        products[i] = ConvertPBProductToModelProduct(pbProduct)
+    }
+    return models.Merchant{
+        Products: products,
+        MerchantId: pbMerchant.MerchantId,
+        MerchantName: pbMerchant.MerchantName,
+        MerchantEmail: pbMerchant.MerchantEmail,
+        MerchantPhone: pbMerchant.MerchantPhone,
+        TotalRevenue: pbMerchant.TotalRevenue,
+        TotalProfit: pbMerchant.TotalProfit,
+        NumberOfSales: pbMerchant.NumberOfSales,
+    }
+}
+
+func ConvertPBProductToModelProduct(pbProduct *pb.Product) models.Product {
+    return models.Product{
+        ProductId: pbProduct.ProductId,
+        ProductName: pbProduct.ProductName,
+        ProductPrice: pbProduct.ProductPrice,
+    }
+}
+
+func ConvertPBProductAmountToProduct(pbProductAmount *pb.ProductAmount) models.ProductAmount {
+    return models.ProductAmount{
+        Product: ConvertPBProductToModelProduct(pbProductAmount.Product),
+        ProductAmount: pbProductAmount.ProductAmount,
+    }
 }

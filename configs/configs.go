@@ -24,6 +24,7 @@ type Config struct {
     PaymentsLogSubscription string `yaml:"payments-log-subscription"`
     OrdersLogSubscription   string `yaml:"orders-log-subscription"`
     OrderResponseSubscription   string `yaml:"order-response-subscription"`
+    WalletUpdatesSubscription string `yaml:"wallet-updates-subscription"`
     GrpcServerAddr          string `yaml:"grpc_server_addr"`
     GRPCPort                string `yaml:"grpc_port"`
     APIGatewayAddr          string `yaml:"api_gateway_addr"`

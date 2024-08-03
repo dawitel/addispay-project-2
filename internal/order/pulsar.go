@@ -44,10 +44,10 @@ func PublishOrder(order *models.Order) error {
     defer producer.Close()
 
     logMessage := &models.OrderLogMessage{
+        Merchant: order.Merchant,
         OrderID: order.OrderID,
         CustID: order.CustID,
-        Status: "CREATED",
-        Amount: order.Amount,
+        TotalAmount: order.TotalAmount,
         Timestamp: "",
         LogLevel: "INFO",
         Message: "Order created",
@@ -119,7 +119,7 @@ func ConsumeOrderResponse() {
             continue
         }
 
-        logger.Success("Received order:", txn.OrderID)
+        logger.Success("Received order:", txn.OrderRequest.OrderID)
        
         // Process the order response
         ProcessOrderResults(&txn)

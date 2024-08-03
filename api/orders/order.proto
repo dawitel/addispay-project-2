@@ -17,12 +17,12 @@ message Merchant {
 message Product {
   string product_id     = 1 [json_name="product_id"];
   string product_name   = 2 [json_name="product_name"];
-  string product_price  = 3 [json_name="product_price"];
+  double product_price  = 3 [json_name="product_price"];
 }
 
 message ProductAmount {
   Product product        = 1 [json_name="product"];
-  int64   product_amount = 2 [json_name="product_ammount"];
+  int64   product_amount = 2 [json_name="product_amount"];
 }
 
 message OrderRequest {

@@ -12,11 +12,10 @@ var logger = utils.GetLogger()
 // ProcessPayment simulates payment processing for an order.
 func ProcessPayment(order *models.Order) *models.Transaction {
     transaction := &models.Transaction{
+        Merchant: order.Merchant,
         TransactionID: utils.GenerateID(),
-        OrderID:       order.OrderID,
-        CustID:        order.CustID,
+        OrderRequest:       *order,
         Status:        "PENDING",
-        Amount:        order.Amount,
         Timestamp:     "" , // replace -> time.now()
     }
 

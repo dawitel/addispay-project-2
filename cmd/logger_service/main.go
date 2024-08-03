@@ -10,7 +10,6 @@ import (
 var logger = utils.GetLogger()
 
 func main() {
-   
     // initialize the database connection
     if err := db.InitDB(); err != nil {
         logger.Error("Failed to initialize database connection: ", err)
